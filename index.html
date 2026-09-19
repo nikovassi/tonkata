@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="bg">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tonkata | Антоан Василев — MTB Downhill</title>
+<meta name="description" content="Официалният сайт на Антоан &quot;Tonkata&quot; Василев — състезател по планинско колоездене, MiddleforestTeam Stara Zagora.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🚵</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<div class="noise-overlay" aria-hidden="true"></div>
+
+<header class="site-header" id="siteHeader">
+  <nav class="nav-wrap">
+    <a href="#home" class="brand">TON<span>KATA</span></a>
+    <button class="nav-toggle" id="navToggle" aria-label="Отвори меню" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#home" class="nav-link active">Начало</a></li>
+      <li><a href="#about" class="nav-link">За мен</a></li>
+      <li><a href="#gallery" class="nav-link">Галерия</a></li>
+      <li><a href="#results" class="nav-link">Състезания</a></li>
+      <li><a href="#contact" class="nav-link">Контакти</a></li>
+    </ul>
+  </nav>
+</header>
+
+<main>
+
+  <!-- HOME / HERO -->
+  <section id="home" class="hero">
+    <div class="hero-bg" style="background-image:url('images/hero/hero-1.jpg')"></div>
+    <div class="hero-gradient"></div>
+    <div class="hero-content reveal">
+      <p class="eyebrow">MIDDLEFOREST TEAM &middot; STARA ZAGORA</p>
+      <h1 class="hero-title">TON<span class="accent">KATA</span></h1>
+      <p class="hero-subtitle">Антоан Василев — планинско колоездене, свободно спускане и адреналин без спирачки.</p>
+      <div class="hero-cta">
+        <a href="#gallery" class="btn btn-primary">Виж галерията</a>
+        <a href="#results" class="btn btn-ghost">Състезания</a>
+      </div>
+    </div>
+    <a href="#about" class="scroll-hint" aria-label="Надолу">
+      <span></span>
+    </a>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about" class="section about">
+    <div class="section-inner about-grid">
+      <div class="about-media reveal">
+        <div class="about-photo-frame">
+          <img src="images/about/portrait.jpg" alt="Антоан Василев" loading="lazy">
+        </div>
+        <div class="about-stats">
+          <div class="stat">
+            <span class="stat-num">2010</span>
+            <span class="stat-label">година на раждане</span>
+          </div>
+          <div class="stat">
+            <span class="stat-num">4+</span>
+            <span class="stat-label">години на колело</span>
+          </div>
+          <div class="stat">
+            <span class="stat-num">DH</span>
+            <span class="stat-label">любима дисциплина</span>
+          </div>
+        </div>
+      </div>
+      <div class="about-text reveal">
+        <p class="section-eyebrow">За мен</p>
+        <h2 class="section-title">Антоан "Tonkata" Василев</h2>
+        <p class="about-lead">Роден през 2010 г. в Стара Загора. От около 4 години карам планинско колело и отдавна съм намерил своята страст — спусканията и адреналинът, който идва с тях. Състезавам се с <strong>MiddleforestTeam Stara Zagora</strong>, а най-бърз съм на трасето &bdquo;Дерето&ldquo; в Стара Загора.</p>
+        <blockquote class="about-quote">
+          „Планината е моето място. Там намирам свободата, адреналина и усещането, за което карам отново и отново.
+          <br><br>
+          Планинското колоездене за мен не е просто спорт. То е начин да предизвиквам себе си, да търся по трудните линии и да усещам всяко спускане до последния завой.
+          <br><br>
+          Обичам скоростта, техничните трасета и моментите, в които трябва да останеш фокусиран и да се довериш на уменията си.
+          <br><br>
+          Всяко спускане носи ново предизвикателство. Всяка грешка носи урок. Всеки успешен завой носи усещането, заради което се връщам в планината.
+          <br><br>
+          Тук споделям моя път, моите спускания и страстта си към планинското колоездене.“
+        </blockquote>
+        <div class="about-badges">
+          <span class="badge">🚵 Downhill</span>
+          <span class="badge">🏔️ Трасе &bdquo;Дерето&ldquo; — Стара Загора</span>
+          <span class="badge">🛡️ MiddleforestTeam Stara Zagora</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- GALLERY -->
+  <section id="gallery" class="section gallery">
+    <div class="section-inner">
+      <p class="section-eyebrow center">Галерия</p>
+      <h2 class="section-title center">Снимки &amp; видео</h2>
+      <p class="section-sub center">Директно от трасето — обновява се автоматично, щом добавим нови файлове в GitHub.</p>
+
+      <div class="gallery-tabs">
+        <button class="tab-btn active" data-tab="photos">Снимки</button>
+        <button class="tab-btn" data-tab="videos">Видеа</button>
+      </div>
+
+      <div id="galleryPhotos" class="gallery-grid" data-state="loading">
+        <p class="loading-msg">Зареждане на снимки…</p>
+      </div>
+
+      <div id="galleryVideos" class="video-grid" data-state="loading" hidden>
+        <p class="loading-msg">Зареждане на видеа…</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- RESULTS -->
+  <section id="results" class="section results">
+    <div class="section-inner">
+      <p class="section-eyebrow center">Състезания</p>
+      <h2 class="section-title center">Резултати &amp; класирания</h2>
+      <p class="section-sub center">Кратка история от старта до последното състезание.</p>
+
+      <div id="resultsTimeline" class="timeline" data-state="loading">
+        <p class="loading-msg">Зареждане на резултати…</p>
+      </div>
+
+      <div class="documents-block">
+        <h3 class="documents-title">📄 Пълни протоколи / документи за класиране</h3>
+        <div id="documentsList" class="documents-list" data-state="loading">
+          <p class="loading-msg">Зареждане на документи…</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact" class="section contact">
+    <div class="section-inner contact-grid">
+      <div class="reveal">
+        <p class="section-eyebrow">Контакти</p>
+        <h2 class="section-title">Да се свържем</h2>
+        <p class="section-sub">За партньорства, покани за състезания или просто поздрав от трасето.</p>
+        <ul class="contact-list">
+          <li>
+            <a href="mailto:antoan.vasilev10@gmail.com" class="contact-item">
+              <span class="contact-icon">✉️</span>
+              <span>
+                <span class="contact-label">Имейл</span>
+                <span class="contact-value">antoan.vasilev10@gmail.com</span>
+              </span>
+            </a>
+          </li>
+          <li>
+            <a href="https://instagram.com/A.Vasilev10" target="_blank" rel="noopener" class="contact-item">
+              <span class="contact-icon">📷</span>
+              <span>
+                <span class="contact-label">Instagram</span>
+                <span class="contact-value">@A.Vasilev10</span>
+              </span>
+            </a>
+          </li>
+          <li>
+            <a href="https://www.facebook.com/p/%D0%9A%D0%BB%D1%83%D0%B1-%D0%BF%D0%BE-%D0%BF%D0%BB%D0%B0%D0%BD%D0%B8%D0%BD%D1%81%D0%BA%D0%BE-%D0%BA%D0%BE%D0%BB%D0%BE%D0%B5%D0%B7%D0%B4%D0%B5%D0%BD%D0%B5-%D0%9C%D0%B8%D0%B4%D1%8A%D0%BB%D1%84%D0%BE%D1%80%D0%B5%D1%81%D1%82-61561526464697/" target="_blank" rel="noopener" class="contact-item">
+              <span class="contact-icon">🛡️</span>
+              <span>
+                <span class="contact-label">Отбор</span>
+                <span class="contact-value">MiddleforestTeam Stara Zagora</span>
+              </span>
+            </a>
+          </li>
+        </ul>
+      </div>
+      <div class="contact-visual reveal" aria-hidden="true">
+        <img src="images/brand/tonikata-wordmark.jpg" alt="" loading="lazy">
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <p>© <span id="year"></span> Антоан "Tonkata" Василев &middot; MiddleforestTeam Stara Zagora</p>
+</footer>
+
+<div class="lightbox" id="lightbox">
+  <button class="lightbox-close" id="lightboxClose" aria-label="Затвори">&times;</button>
+  <img id="lightboxImg" src="" alt="">
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>

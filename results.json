@@ -1,0 +1,25 @@
+[
+  {
+    "place": "16",
+    "event": "Borovets Open Cup",
+    "location": "Боровец",
+    "dateLabel": "2026",
+    "note": "Последно състезание за сезона.",
+    "photo": "borovets-team.jpg"
+  },
+  {
+    "place": "11",
+    "event": "Държавно/клубно състезание",
+    "location": "Пампорово",
+    "dateLabel": "2026",
+    "note": ""
+  },
+  {
+    "place": "3",
+    "event": "Детско състезание по планинско колоездене — Downhill",
+    "location": "писта „Диаманта“, с. Енина (Казанлък)",
+    "dateLabel": "27.04.2025",
+    "note": "Купа и грамота за III-то място.",
+    "photo": "enina-nagrada.jpg"
+  }
+]
