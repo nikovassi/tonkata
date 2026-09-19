@@ -15,21 +15,72 @@ const IMAGE_EXT = [".jpg", ".jpeg", ".png", ".webp", ".gif"];
 const VIDEO_EXT = [".mp4", ".webm", ".mov"];
 const DOC_EXT = [".pdf"];
 
-function githubApiUrl(path) {
-  return `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${path}?ref=${REPO_BRANCH}`;
+// GitHub's unauthenticated API allows 60 requests/hour per visitor IP.
+// Instead of one API call per folder (gallery + videos + documents = 3
+// calls per page load, which can burn through that quota fast if someone
+// reloads a few times), we fetch the whole repo file tree in ONE call and
+// filter it in the browser. The result is also cached for a few minutes
+// in sessionStorage so repeat page loads in the same visit don't call the
+// API again at all.
+const TREE_CACHE_KEY = "tonkata-tree-cache-v1";
+const TREE_CACHE_TTL_MS = 5 * 60 * 1000; // 5 minutes
+
+class RateLimitError extends Error {}
+
+async function fetchRepoTree() {
+  try {
+    const cached = sessionStorage.getItem(TREE_CACHE_KEY);
+    if (cached) {
+      const { timestamp, tree } = JSON.parse(cached);
+      if (Array.isArray(tree) && Date.now() - timestamp < TREE_CACHE_TTL_MS) {
+        return tree;
+      }
+    }
+  } catch (e) {
+    // sessionStorage unavailable/corrupt — just skip the cache.
+  }
+
+  const url = `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/git/trees/${REPO_BRANCH}?recursive=1`;
+  const res = await fetch(url);
+
+  if (res.status === 403) {
+    let isRateLimit = false;
+    try {
+      const data = await res.json();
+      isRateLimit = /rate limit/i.test(data.message || "");
+    } catch (e) {
+      isRateLimit = true;
+    }
+    if (isRateLimit) throw new RateLimitError("GitHub API rate limit exceeded");
+  }
+  if (!res.ok) throw new Error(`GitHub API ${res.status}`);
+
+  const data = await res.json();
+  const tree = Array.isArray(data.tree) ? data.tree : [];
+
+  try {
+    sessionStorage.setItem(TREE_CACHE_KEY, JSON.stringify({ timestamp: Date.now(), tree }));
+  } catch (e) {
+    // Storage full/blocked — not critical, just means no caching this time.
+  }
+
+  return tree;
 }
 
-async function fetchFolder(path) {
-  const res = await fetch(githubApiUrl(path));
-  if (res.status === 404) {
-    // Folder doesn't exist yet (git has no empty folders) — treat as "nothing added yet".
-    return [];
-  }
-  if (!res.ok) throw new Error(`GitHub API ${res.status} for ${path}`);
-  const data = await res.json();
-  if (!Array.isArray(data)) return [];
-  return data;
+// Returns the direct-child files (not nested in a subfolder) under `prefix`
+// (e.g. "images/gallery/"), in the same shape the old per-folder API gave us.
+function filesUnder(tree, prefix) {
+  return tree
+    .filter((item) => item.type === "blob" && item.path.startsWith(prefix))
+    .map((item) => ({
+      name: item.path.slice(prefix.length),
+      download_url: `https://raw.githubusercontent.com/${REPO_OWNER}/${REPO_NAME}/${REPO_BRANCH}/${item.path}`,
+    }))
+    .filter((f) => f.name && !f.name.includes("/"));
 }
+
+const RATE_LIMIT_MSG =
+  '<p class="error-msg">GitHub временно ограничи заявките от тази мрежа (лимит за анонимен достъп). Презареди страницата след няколко минути.</p>';
 
 function hasExt(name, list) {
   const lower = name.toLowerCase();
@@ -135,11 +186,12 @@ tabBtns.forEach((btn) => {
   });
 });
 
-/* ---------------- Load gallery photos ---------------- */
-async function loadGalleryPhotos() {
+/* ---------------- Load gallery photos + videos (one shared API call) ---------------- */
+async function loadGalleryPhotos(treePromise) {
   try {
-    const files = (await fetchFolder("images/gallery"))
-      .filter((f) => f.type === "file" && hasExt(f.name, IMAGE_EXT))
+    const tree = await treePromise;
+    const files = filesUnder(tree, "images/gallery/")
+      .filter((f) => hasExt(f.name, IMAGE_EXT))
       .sort((a, b) => a.name.localeCompare(b.name));
 
     if (files.length === 0) {
@@ -161,15 +213,18 @@ async function loadGalleryPhotos() {
     });
   } catch (err) {
     console.error(err);
-    galleryPhotos.innerHTML = '<p class="error-msg">Възникна проблем при зареждане на снимките. Презареди страницата.</p>';
+    galleryPhotos.innerHTML =
+      err instanceof RateLimitError
+        ? RATE_LIMIT_MSG
+        : '<p class="error-msg">Възникна проблем при зареждане на снимките. Презареди страницата.</p>';
   }
 }
 
-/* ---------------- Load gallery videos ---------------- */
-async function loadGalleryVideos() {
+async function loadGalleryVideos(treePromise) {
   try {
-    const files = (await fetchFolder("videos"))
-      .filter((f) => f.type === "file" && hasExt(f.name, VIDEO_EXT))
+    const tree = await treePromise;
+    const files = filesUnder(tree, "videos/")
+      .filter((f) => hasExt(f.name, VIDEO_EXT))
       .sort((a, b) => a.name.localeCompare(b.name));
 
     if (files.length === 0) {
@@ -189,7 +244,10 @@ async function loadGalleryVideos() {
       .join("");
   } catch (err) {
     console.error(err);
-    galleryVideos.innerHTML = '<p class="error-msg">Възникна проблем при зареждане на видеата. Презареди страницата.</p>';
+    galleryVideos.innerHTML =
+      err instanceof RateLimitError
+        ? RATE_LIMIT_MSG
+        : '<p class="error-msg">Възникна проблем при зареждане на видеата. Презареди страницата.</p>';
   }
 }
 
@@ -238,12 +296,13 @@ async function loadResults() {
 }
 
 /* ---------------- Documents (PDF classifications) ---------------- */
-async function loadDocuments() {
+async function loadDocuments(treePromise) {
   const block = document.getElementById("documentsBlock");
   const list = document.getElementById("documentsList");
   try {
-    const files = (await fetchFolder("documents"))
-      .filter((f) => f.type === "file" && hasExt(f.name, DOC_EXT))
+    const tree = await treePromise;
+    const files = filesUnder(tree, "documents/")
+      .filter((f) => hasExt(f.name, DOC_EXT))
       .sort((a, b) => b.name.localeCompare(a.name));
 
     // No PDFs yet — keep this whole block hidden instead of showing a
@@ -271,7 +330,11 @@ async function loadDocuments() {
   }
 }
 
-loadGalleryPhotos();
-loadGalleryVideos();
+// One shared repo-tree fetch, reused by all three loaders below so a page
+// load costs at most a single GitHub API call instead of three.
+const repoTreePromise = fetchRepoTree();
+
+loadGalleryPhotos(repoTreePromise);
+loadGalleryVideos(repoTreePromise);
 loadResults();
-loadDocuments();
+loadDocuments(repoTreePromise);
