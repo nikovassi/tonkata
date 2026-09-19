@@ -239,14 +239,18 @@ async function loadResults() {
 
 /* ---------------- Documents (PDF classifications) ---------------- */
 async function loadDocuments() {
+  const block = document.getElementById("documentsBlock");
   const list = document.getElementById("documentsList");
   try {
     const files = (await fetchFolder("documents"))
       .filter((f) => f.type === "file" && hasExt(f.name, DOC_EXT))
       .sort((a, b) => b.name.localeCompare(a.name));
 
+    // No PDFs yet — keep this whole block hidden instead of showing a
+    // "coming soon" placeholder. It appears automatically the moment
+    // the first PDF is uploaded to the documents/ folder in GitHub.
     if (files.length === 0) {
-      list.innerHTML = '<p class="empty-msg">Скоро тук ще качим протоколи от класирания (PDF).</p>';
+      block.hidden = true;
       return;
     }
 
@@ -260,9 +264,10 @@ async function loadDocuments() {
         </a>`
       )
       .join("");
+    block.hidden = false;
   } catch (err) {
     console.error(err);
-    list.innerHTML = '<p class="error-msg">Документите не можаха да се заредят.</p>';
+    block.hidden = true;
   }
 }
 

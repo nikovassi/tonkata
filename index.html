@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Tonkata | Антоан Василев — MTB Downhill</title>
 <meta name="description" content="Официалният сайт на Антоан &quot;Tonkata&quot; Василев — състезател по планинско колоездене, MiddleforestTeam Stara Zagora.">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🚵</text></svg>">
+<link rel="icon" type="image/jpeg" href="images/brand/tonikata-wordmark.jpg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -17,7 +17,9 @@
 
 <header class="site-header" id="siteHeader">
   <nav class="nav-wrap">
-    <a href="#home" class="brand">TON<span>KATA</span></a>
+    <a href="#home" class="brand">
+      <img src="images/brand/tonikata-wordmark.jpg" alt="Tonkata" class="brand-logo">
+    </a>
     <button class="nav-toggle" id="navToggle" aria-label="Отвори меню" aria-expanded="false">
       <span></span><span></span><span></span>
     </button>
@@ -130,7 +132,7 @@
         <p class="loading-msg">Зареждане на резултати…</p>
       </div>
 
-      <div class="documents-block">
+      <div class="documents-block" id="documentsBlock" hidden>
         <h3 class="documents-title">📄 Пълни протоколи / документи за класиране</h3>
         <div id="documentsList" class="documents-list" data-state="loading">
           <p class="loading-msg">Зареждане на документи…</p>
