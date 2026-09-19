@@ -135,19 +135,19 @@ ul { list-style: none; margin: 0; padding: 0; }
   min-height: 100svh;
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   overflow: hidden;
 }
 .hero-bg {
   position: absolute; inset: 0;
   background-size: cover;
   background-position: center 30%;
-  transform: scale(1.08);
+  transform: scale(1.34) translateX(16%);
   animation: heroZoom 18s ease-in-out infinite alternate;
 }
 @keyframes heroZoom {
-  from { transform: scale(1.08); }
-  to { transform: scale(1.16); }
+  from { transform: scale(1.34) translateX(16%); }
+  to { transform: scale(1.42) translateX(16%); }
 }
 .hero-gradient {
   position: absolute; inset: 0;
